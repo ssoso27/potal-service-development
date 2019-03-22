@@ -4,13 +4,7 @@ public class UserDao {
     public User get(Long id) throws ClassNotFoundException, SQLException {
         // DB가 뭐야? mysql
         // 어딨어? 알려줄게...
-
-        // 드라이버 로드
-        Class.forName("com.mysql.cj.jdbc.Driver");
-        // 커넥션 맺고 (=> 맺어지면 소켓통신에 들어감. TCP 프로토콜 아래에서 돌아감)
-        // Connection con = DriverManager.getConnection("jdbc:mysql://172.18.108.128/jeju?serverTimezone=UTC", "portal", "portaljejunu");
-        Connection con = DriverManager.getConnection("jdbc:mysql://192.168.0.54/jeju?serverTimezone=UTC",
-                "jeju", "jejupw");
+         Connection con = getConnection();
         // SQL 쿼리도 만들고
         /// Statement - 고정 쿼리. -> 만약 id 1, 2, 3을 넣는다면, 쿼리 파싱 3번 필요.
         /// preparedStatement - 변동 쿼리. 나중에 매핑 가능. -> 만약 id 1, 2, 3을 넣는대도, 쿼리 파싱 1번만 필요.
@@ -36,9 +30,7 @@ public class UserDao {
     }
 
     public long add(User user) throws ClassNotFoundException, SQLException {
-        Class.forName("com.mysql.cj.jdbc.Driver");
-        Connection con = DriverManager.getConnection("jdbc:mysql://192.168.0.54/jeju?serverTimezone=UTC",
-                "jeju", "jejupw");
+        Connection con = getConnection();
 
         PreparedStatement preparedStatement = con.prepareStatement("insert into userinfo(name, password) values (?, ?)");
         preparedStatement.setString(1, user.getName());
@@ -57,5 +49,14 @@ public class UserDao {
         con.close();
 
         return id;
+    }
+
+    private Connection getConnection() throws ClassNotFoundException, SQLException {
+        // 드라이버 로드
+        Class.forName("com.mysql.cj.jdbc.Driver");
+        // 커넥션 맺고 (=> 맺어지면 소켓통신에 들어감. TCP 프로토콜 아래에서 돌아감)
+        // Connection con = DriverManager.getConnection("jdbc:mysql://172.18.108.128/jeju?serverTimezone=UTC", "portal", "portaljejunu");
+        return DriverManager.getConnection("jdbc:mysql://192.168.0.54/jeju?serverTimezone=UTC",
+                "jeju", "jejupw");
     }
 }
