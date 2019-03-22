@@ -34,4 +34,28 @@ public class UserDao {
         // 값 리턴
         return user;
     }
+
+    public long add(User user) throws ClassNotFoundException, SQLException {
+        Class.forName("com.mysql.cj.jdbc.Driver");
+        Connection con = DriverManager.getConnection("jdbc:mysql://192.168.0.54/jeju?serverTimezone=UTC",
+                "jeju", "jejupw");
+
+        PreparedStatement preparedStatement = con.prepareStatement("insert into userinfo(name, password) values (?, ?)");
+        preparedStatement.setString(1, user.getName());
+        preparedStatement.setString(2, user.getPassword());
+
+        preparedStatement.executeUpdate();
+
+        preparedStatement = con.prepareStatement("select last_insert_id()");
+        ResultSet resultSet = preparedStatement.executeQuery();
+
+        resultSet.next();
+        long id = resultSet.getLong(1);
+
+        resultSet.close();
+        preparedStatement.close();
+        con.close();
+
+        return id;
+    }
 }
