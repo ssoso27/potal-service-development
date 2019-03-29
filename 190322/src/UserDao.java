@@ -1,6 +1,6 @@
 import java.sql.*;
 
-public class UserDao {
+public abstract class UserDao {
     public User get(Long id) throws ClassNotFoundException, SQLException {
         // DB가 뭐야? mysql
         // 어딨어? 알려줄게...
@@ -51,12 +51,14 @@ public class UserDao {
         return id;
     }
 
-    private Connection getConnection() throws ClassNotFoundException, SQLException {
-        // 드라이버 로드
-        Class.forName("com.mysql.cj.jdbc.Driver");
-        // 커넥션 맺고 (=> 맺어지면 소켓통신에 들어감. TCP 프로토콜 아래에서 돌아감)
-        // Connection con = DriverManager.getConnection("jdbc:mysql://172.18.108.128/jeju?serverTimezone=UTC", "portal", "portaljejunu");
-        return DriverManager.getConnection("jdbc:mysql://192.168.0.54/jeju?serverTimezone=UTC",
-                "jeju", "jejupw");
-    }
+    abstract Connection getConnection() throws ClassNotFoundException, SQLException;
+
+//    private Connection getConnection() throws ClassNotFoundException, SQLException {
+//        // 드라이버 로드
+//        Class.forName("com.mysql.cj.jdbc.Driver");
+//        // 커넥션 맺고 (=> 맺어지면 소켓통신에 들어감. TCP 프로토콜 아래에서 돌아감)
+//        // Connection con = DriverManager.getConnection("jdbc:mysql://172.18.108.128/jeju?serverTimezone=UTC", "portal", "portaljejunu");
+//        return DriverManager.getConnection("jdbc:mysql://192.168.0.54/jeju?serverTimezone=UTC",
+//                "jeju", "jejupw");
+//    }
 }
