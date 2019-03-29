@@ -1,7 +1,12 @@
 import java.sql.*;
 
 public class UserDao {
-    private final ConnectionMaker connectionMaker = new JejuConnectionMaker();
+    private final ConnectionMaker connectionMaker;
+
+    // 의존성을 외부로 떠넘김
+    public UserDao(ConnectionMaker connectionMaker) {
+        this.connectionMaker = connectionMaker;
+    }
 
     public User get(Long id) throws ClassNotFoundException, SQLException {
         Connection con = connectionMaker.getConnection();
