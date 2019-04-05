@@ -1,8 +1,5 @@
 package kr.ac.jejunu.userdao;
 
-import kr.ac.jejunu.userdao.DaoFactory;
-import kr.ac.jejunu.userdao.User;
-import kr.ac.jejunu.userdao.UserDao;
 import org.junit.Before;
 import org.junit.Test;
 import org.springframework.context.ApplicationContext;

@@ -2,11 +2,13 @@ package kr.ac.jejunu.userdao;
 
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Configuration;
 import org.springframework.jdbc.datasource.SimpleDriverDataSource;
 
 import javax.sql.DataSource;
 import java.sql.Driver;
 
+@Configuration
 public class DaoFactory {
     // 의존성을 모아놓은 클래스.
     // 추후 배포할때 얘만 바꾸면 된다.
@@ -38,7 +40,7 @@ public class DaoFactory {
 
     @Bean
     public DataSource dataSource() {
-        // DB 정보를 다 가지고 있다! 
+        // DB 정보를 다 가지고 있다!
         SimpleDriverDataSource dataSource = new SimpleDriverDataSource();
         try {
             dataSource.setDriverClass((Class<? extends Driver>) Class.forName(className));
