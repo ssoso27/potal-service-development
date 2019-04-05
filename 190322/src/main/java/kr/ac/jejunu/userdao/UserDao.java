@@ -76,20 +76,8 @@ public class UserDao {
 
             preparedStatement.executeUpdate();
 
-            preparedStatement = con.prepareStatement("select last_insert_id()");
-            resultSet = preparedStatement.executeQuery();
-
-            resultSet.next();
-            id = resultSet.getLong(1);
+            id = getLasttInsertId(con);
         } finally {
-            if (resultSet != null) {
-                try {
-                    resultSet.close();
-                } catch (SQLException e) {
-                    e.printStackTrace();
-                }
-            }
-
             if (preparedStatement != null) {
                 try {
                     preparedStatement.close();
@@ -101,6 +89,29 @@ public class UserDao {
             if (con != null) {
                 try {
                     con.close();
+                } catch (SQLException e) {
+                    e.printStackTrace();
+                }
+            }
+        }
+
+        return id;
+    }
+
+    public Long getLasttInsertId(Connection connection) throws SQLException {
+        ResultSet resultSet = null;
+        Long id = null;
+
+        try {
+            PreparedStatement preparedStatement = connection.prepareStatement("select last_insert_id()");
+            resultSet = preparedStatement.executeQuery();
+
+            resultSet.next();
+            id = resultSet.getLong(1);
+        } finally {
+            if (resultSet != null) {
+                try {
+                    resultSet.close();
                 } catch (SQLException e) {
                     e.printStackTrace();
                 }
