@@ -3,6 +3,7 @@ package kr.ac.jejunu.userdao;
 import kr.ac.jejunu.userdao.DaoFactory;
 import kr.ac.jejunu.userdao.User;
 import kr.ac.jejunu.userdao.UserDao;
+import org.junit.Before;
 import org.junit.Test;
 
 import java.sql.SQLException;
@@ -11,14 +12,20 @@ import static org.hamcrest.core.Is.is;
 import static org.junit.Assert.assertThat;
 
 public class UserDaoTests {
+    private UserDao userDao;
+
+    @Before
+    public void setup() {
+        DaoFactory daoFactory = new DaoFactory();
+        UserDao userDao = daoFactory.getUserDao();
+    }
+
     @Test
     public void testGet() throws SQLException, ClassNotFoundException {
         long id = 1L;
         String name = "허윤호";
         String password = "1234";
 
-        DaoFactory daoFactory = new DaoFactory();
-        UserDao userDao = daoFactory.getUserDao();
         User user = userDao.get(id);
 
         assertThat(user.getId(), is(id));
@@ -35,8 +42,6 @@ public class UserDaoTests {
         user.setName(name);
         user.setPassword(password);
 
-        DaoFactory daoFactory = new DaoFactory();
-        UserDao userDao = daoFactory.getUserDao();
         long id = userDao.add(user);
         User resultUser = userDao.get(id);
 
