@@ -1,3 +1,5 @@
+package kr.ac.jejunu.userdao;
+
 import org.junit.Test;
 
 import java.sql.SQLException;

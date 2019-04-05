@@ -1,3 +1,5 @@
+package kr.ac.jejunu.userdao;
+
 public class User {
     private long id;
     private String name;
