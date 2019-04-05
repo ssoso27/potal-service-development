@@ -2,18 +2,9 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="5d438e3d-7ea0-4520-9ecb-3c66d8725dc5" name="Default Changelist" comment="">
-      <change afterPath="$PROJECT_DIR$/.idea/libraries/Gradle__org_springframework_spring_jdbc_5_1_6_RELEASE.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/libraries/Gradle__org_springframework_spring_tx_5_1_6_RELEASE.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.gradle/4.10/fileHashes/fileHashes.bin" beforeDir="false" afterPath="$PROJECT_DIR$/.gradle/4.10/fileHashes/fileHashes.bin" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.gradle/4.10/fileHashes/fileHashes.lock" beforeDir="false" afterPath="$PROJECT_DIR$/.gradle/4.10/fileHashes/fileHashes.lock" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/compiler.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/compiler.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/modules/kr.ac.jejunu.190322.main.iml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/modules/kr.ac.jejunu.190322.main.iml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/modules/kr.ac.jejunu.190322.test.iml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/modules/kr.ac.jejunu.190322.test.iml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/build.gradle" beforeDir="false" afterPath="$PROJECT_DIR$/build.gradle" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/production/classes/kr/ac/jejunu/userdao/User.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/classes/kr/ac/jejunu/userdao/User.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/kr/ac/jejunu/userdao/DaoFactory.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/kr/ac/jejunu/userdao/DaoFactory.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/kr/ac/jejunu/userdao/JejuConnectionMaker.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/kr/ac/jejunu/userdao/JejuConnectionMaker.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/kr/ac/jejunu/userdao/User.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/kr/ac/jejunu/userdao/User.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/kr/ac/jejunu/userdao/UserDao.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/kr/ac/jejunu/userdao/UserDao.java" afterDir="false" />
     </list>
     <ignored path="$PROJECT_DIR$/out/" />
     <ignored path="$PROJECT_DIR$/.gradle/" />
@@ -52,10 +43,10 @@
   <component name="FileEditorManager">
     <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
       <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/main/java/kr/ac/jejunu/userdao/User.java">
+        <entry file="file://$PROJECT_DIR$/src/main/java/kr/ac/jejunu/userdao/JejuConnectionMaker.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="133">
-              <caret line="7" column="13" selection-start-line="7" selection-start-column="13" selection-end-line="7" selection-end-column="13" />
+            <state relative-caret-position="135">
+              <caret line="10" column="29" lean-forward="true" selection-start-line="10" selection-start-column="29" selection-end-line="10" selection-end-column="29" />
               <folding>
                 <element signature="imports" expanded="true" />
               </folding>
@@ -63,22 +54,17 @@
           </provider>
         </entry>
       </file>
-      <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/main/java/kr/ac/jejunu/userdao/ConnectionMaker.java">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="76">
-              <caret line="5" column="10" selection-start-line="5" selection-start-column="10" selection-end-line="5" selection-end-column="10" />
-            </state>
-          </provider>
-        </entry>
-      </file>
       <file pinned="false" current-in-tab="true">
-        <entry file="file://$PROJECT_DIR$/src/main/java/kr/ac/jejunu/userdao/JejuConnectionMaker.java">
+        <entry file="file://$PROJECT_DIR$/src/main/java/kr/ac/jejunu/userdao/DaoFactory.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="209">
-              <caret line="11" column="22" selection-start-line="11" selection-start-column="22" selection-end-line="11" selection-end-column="22" />
+            <state relative-caret-position="133">
+              <caret line="40" column="28" selection-start-line="40" selection-start-column="28" selection-end-line="40" selection-end-column="28" />
               <folding>
                 <element signature="imports" expanded="true" />
+                <element signature="e#398#399#0" expanded="true" />
+                <element signature="e#451#452#0" expanded="true" />
+                <element signature="e#509#510#0" expanded="true" />
+                <element signature="e#557#558#0" expanded="true" />
               </folding>
             </state>
           </provider>
@@ -89,6 +75,20 @@
           <provider selected="true" editor-type-id="text-editor">
             <state relative-caret-position="183">
               <caret line="25" column="69" selection-start-line="25" selection-start-column="69" selection-end-line="25" selection-end-column="69" />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/main/java/kr/ac/jejunu/userdao/UserDao.java">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="211">
+              <caret line="38" column="35" selection-start-line="38" selection-start-column="35" selection-end-line="38" selection-end-column="35" />
+              <folding>
+                <element signature="imports" expanded="true" />
+                <element signature="e#374#375#0" expanded="true" />
+                <element signature="e#418#419#0" expanded="true" />
+              </folding>
             </state>
           </provider>
         </entry>
@@ -117,16 +117,16 @@
         <option value="$PROJECT_DIR$/src/UserDao.java" />
         <option value="$PROJECT_DIR$/src/DaoFactory.java" />
         <option value="$PROJECT_DIR$/src/UserDaoTests.java" />
-        <option value="$PROJECT_DIR$/src/main/java/kr/ac/jejunu/userdao/UserDao.java" />
         <option value="$PROJECT_DIR$/src/main/java/kr/ac/jejunu/userdao/HallaConnectionMaker.java" />
         <option value="$PROJECT_DIR$/src/main/java/kr/ac/jejunu/userdao/ConnectionMaker.java" />
         <option value="$PROJECT_DIR$/src/main/java/kr/ac/jejunu/userdao/UserDaoTests.java" />
         <option value="$PROJECT_DIR$/src/test/java/UserDaoTests.java" />
-        <option value="$PROJECT_DIR$/src/main/java/kr/ac/jejunu/userdao/DaoFactory.java" />
         <option value="$PROJECT_DIR$/src/test/java/kr/ac/jejunu/userdao/UserDaoTests.java" />
         <option value="$PROJECT_DIR$/src/main/java/kr/ac/jejunu/userdao/User.java" />
         <option value="$PROJECT_DIR$/build.gradle" />
         <option value="$PROJECT_DIR$/src/main/java/kr/ac/jejunu/userdao/JejuConnectionMaker.java" />
+        <option value="$PROJECT_DIR$/src/main/java/kr/ac/jejunu/userdao/UserDao.java" />
+        <option value="$PROJECT_DIR$/src/main/java/kr/ac/jejunu/userdao/DaoFactory.java" />
       </list>
     </option>
   </component>
@@ -192,11 +192,12 @@
   <component name="PropertiesComponent">
     <property name="WebServerToolWindowFactoryState" value="false" />
     <property name="aspect.path.notification.shown" value="true" />
-    <property name="com.android.tools.idea.instantapp.provision.ProvisionBeforeRunTaskProvider.myTimeStamp" value="1554454955398" />
+    <property name="com.android.tools.idea.instantapp.provision.ProvisionBeforeRunTaskProvider.myTimeStamp" value="1554455515498" />
     <property name="last_directory_selection" value="$PROJECT_DIR$/src/main/java" />
     <property name="last_opened_file_path" value="$USER_HOME$/Desktop/my-first-project/my-first-project" />
     <property name="nodejs_interpreter_path.stuck_in_default_project" value="undefined stuck path" />
     <property name="nodejs_npm_path_reset_for_default_project" value="true" />
+    <property name="nodejs_package_manager_path" value="npm" />
     <property name="project.structure.last.edited" value="Modules" />
     <property name="project.structure.proportion" value="0.15" />
     <property name="project.structure.side.proportion" value="0.2" />
@@ -316,7 +317,7 @@
       <workItem from="1554372394418" duration="1310000" />
       <workItem from="1554375551298" duration="61000" />
       <workItem from="1554448159115" duration="1145000" />
-      <workItem from="1554449379330" duration="5459000" />
+      <workItem from="1554449379330" duration="6015000" />
     </task>
     <servers />
   </component>
@@ -353,7 +354,7 @@
     </history-entry>
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="21417000" />
+    <option name="totallyTimeSpent" value="21973000" />
   </component>
   <component name="ToolWindowManager">
     <frame x="-7" y="-7" width="1550" height="838" extended-state="6" />
@@ -400,28 +401,8 @@
   <component name="editorHistoryManager">
     <entry file="file://$PROJECT_DIR$/src/JejuUserDao.java" />
     <entry file="file://$PROJECT_DIR$/src/HallaUserDao.java" />
-    <entry file="file://$PROJECT_DIR$/src/main/java/kr/ac/jejunu/userdao/UserDao.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="19">
-          <caret line="1" selection-start-line="1" selection-end-line="1" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/gradlew">
       <provider selected="true" editor-type-id="text-editor" />
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/kr/ac/jejunu/userdao/DaoFactory.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="285">
-          <caret line="18" lean-forward="true" selection-start-line="18" selection-end-line="18" />
-          <folding>
-            <element signature="e#398#399#0" expanded="true" />
-            <element signature="e#433#434#0" expanded="true" />
-            <element signature="e#509#510#0" expanded="true" />
-            <element signature="e#557#558#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/src/test/java/kr/ac/jejunu/userdao/UserDaoTests.java">
       <provider selected="true" editor-type-id="text-editor">
@@ -430,13 +411,6 @@
           <folding>
             <element signature="imports" expanded="true" />
           </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/kr/ac/jejunu/userdao/ConnectionMaker.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="76">
-          <caret line="5" column="10" selection-start-line="5" selection-start-column="10" selection-end-line="5" selection-end-column="10" />
         </state>
       </provider>
     </entry>
@@ -467,12 +441,45 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/kr/ac/jejunu/userdao/JejuConnectionMaker.java">
+    <entry file="file://$PROJECT_DIR$/src/main/java/kr/ac/jejunu/userdao/ConnectionMaker.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="209">
-          <caret line="11" column="22" selection-start-line="11" selection-start-column="22" selection-end-line="11" selection-end-column="22" />
+        <state relative-caret-position="76">
+          <caret line="5" column="10" selection-start-line="5" selection-start-column="10" selection-end-line="5" selection-end-column="10" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/kr/ac/jejunu/userdao/UserDao.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="211">
+          <caret line="38" column="35" selection-start-line="38" selection-start-column="35" selection-end-line="38" selection-end-column="35" />
           <folding>
             <element signature="imports" expanded="true" />
+            <element signature="e#374#375#0" expanded="true" />
+            <element signature="e#418#419#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/kr/ac/jejunu/userdao/JejuConnectionMaker.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="135">
+          <caret line="10" column="29" lean-forward="true" selection-start-line="10" selection-start-column="29" selection-end-line="10" selection-end-column="29" />
+          <folding>
+            <element signature="imports" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/kr/ac/jejunu/userdao/DaoFactory.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="133">
+          <caret line="40" column="28" selection-start-line="40" selection-start-column="28" selection-end-line="40" selection-end-column="28" />
+          <folding>
+            <element signature="imports" expanded="true" />
+            <element signature="e#398#399#0" expanded="true" />
+            <element signature="e#451#452#0" expanded="true" />
+            <element signature="e#509#510#0" expanded="true" />
+            <element signature="e#557#558#0" expanded="true" />
           </folding>
         </state>
       </provider>
