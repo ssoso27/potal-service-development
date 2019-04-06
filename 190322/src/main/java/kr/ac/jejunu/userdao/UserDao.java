@@ -98,6 +98,40 @@ public class UserDao {
         return id;
     }
 
+    public void update(User user) throws SQLException {
+        Connection con = null;
+        PreparedStatement preparedStatement = null;
+        ResultSet resultSet = null;
+        Long id = null;
+
+        try {
+            con = dataSource.getConnection();
+
+            preparedStatement = con.prepareStatement("UPDATE userinfo SET name=?, password=? WHERE id=?");
+            preparedStatement.setString(1, user.getName());
+            preparedStatement.setString(2, user.getPassword());
+            preparedStatement.setLong(3, user.getId());
+
+            preparedStatement.executeUpdate();
+        } finally {
+            if (preparedStatement != null) {
+                try {
+                    preparedStatement.close();
+                } catch (SQLException e) {
+                    e.printStackTrace();
+                }
+            }
+
+            if (con != null) {
+                try {
+                    con.close();
+                } catch (SQLException e) {
+                    e.printStackTrace();
+                }
+            }
+        }
+    }
+
     public Long getLasttInsertId(Connection connection) throws SQLException {
         ResultSet resultSet = null;
         Long id = null;
