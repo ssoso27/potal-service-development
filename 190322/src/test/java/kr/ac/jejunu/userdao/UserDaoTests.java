@@ -9,6 +9,7 @@ import java.sql.SQLException;
 
 import static org.hamcrest.core.Is.is;
 import static org.junit.Assert.assertThat;
+import static org.hamcrest.Matchers.nullValue;
 
 public class UserDaoTests {
     private UserDao userDao;
@@ -78,8 +79,22 @@ public class UserDaoTests {
     }
 
     @Test
-    public void testDelete() {
-        // 추가하고, 삭제하고, 삭제된거 확인
+    public void testDelete() throws SQLException, ClassNotFoundException {
+        // 추가하고,
+        String name = "소히";
+        String password = "sosohehe";
+        User user = new User();
+        user.setName(name);
+        user.setPassword(password);
+        Long id = userDao.add(user);
+        user.setId(id);
+
+        // 삭제하고,
+        userDao.delete(id);
+
+        // 삭제된거 확인
+        User result = userDao.get(id);
+        assertThat(result, nullValue());
     }
 
 }

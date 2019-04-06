@@ -132,6 +132,38 @@ public class UserDao {
         }
     }
 
+
+    public void delete(Long id) throws SQLException {
+        Connection con = null;
+        PreparedStatement preparedStatement = null;
+        ResultSet resultSet = null;
+
+        try {
+            con = dataSource.getConnection();
+
+            preparedStatement = con.prepareStatement("DELETE FROM userinfo WHERE id = ?");
+            preparedStatement.setLong(1, id);
+
+            preparedStatement.executeUpdate();
+        } finally {
+            if (preparedStatement != null) {
+                try {
+                    preparedStatement.close();
+                } catch (SQLException e) {
+                    e.printStackTrace();
+                }
+            }
+
+            if (con != null) {
+                try {
+                    con.close();
+                } catch (SQLException e) {
+                    e.printStackTrace();
+                }
+            }
+        }
+    }
+
     public Long getLasttInsertId(Connection connection) throws SQLException {
         ResultSet resultSet = null;
         Long id = null;
