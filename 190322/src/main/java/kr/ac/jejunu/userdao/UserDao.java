@@ -2,6 +2,7 @@ package kr.ac.jejunu.userdao;
 
 
 import javax.sql.DataSource;
+import javax.swing.plaf.nimbus.State;
 import java.sql.*;
 
 public class UserDao {
@@ -20,8 +21,8 @@ public class UserDao {
         try {
             con = dataSource.getConnection();
 
-            preparedStatement = con.prepareStatement("select * from userinfo where id = ?");
-            preparedStatement.setLong(1, id);
+            StatementStrategy statementStrategy = new GetStatementStrategy();
+            statementStrategy.makePrepareStatement(id, con);
 
             resultSet = preparedStatement.executeQuery();
 
@@ -70,9 +71,8 @@ public class UserDao {
         try {
             con = dataSource.getConnection();
 
-            preparedStatement = con.prepareStatement("insert into userinfo(name, password) values (?, ?)");
-            preparedStatement.setString(1, user.getName());
-            preparedStatement.setString(2, user.getPassword());
+            StatementStrategy statementStrategy = new AddStatementStrategy();
+            preparedStatement = statementStrategy.makePrepareStatement(user, con);
 
             preparedStatement.executeUpdate();
 
@@ -107,10 +107,8 @@ public class UserDao {
         try {
             con = dataSource.getConnection();
 
-            preparedStatement = con.prepareStatement("UPDATE userinfo SET name=?, password=? WHERE id=?");
-            preparedStatement.setString(1, user.getName());
-            preparedStatement.setString(2, user.getPassword());
-            preparedStatement.setLong(3, user.getId());
+            StatementStrategy statementStrategy = new UpdateStatementStrategy();
+            preparedStatement = statementStrategy.makePrepareStatement(user, con);
 
             preparedStatement.executeUpdate();
         } finally {

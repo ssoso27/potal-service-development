@@ -5,5 +5,5 @@ import java.sql.PreparedStatement;
 import java.sql.SQLException;
 
 public interface StatementStrategy {
-    PreparedStatement makePrepareStatement(Long id, Connection con) throws SQLException;
+    PreparedStatement makePrepareStatement(Object object, Connection con) throws SQLException;
 }
