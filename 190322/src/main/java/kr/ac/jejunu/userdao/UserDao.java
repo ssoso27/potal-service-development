@@ -13,8 +13,13 @@ public class UserDao {
 
     public User get(Long id) throws ClassNotFoundException, SQLException {
         StatementStrategy statementStrategy = con -> {
-            PreparedStatement preparedStatement = con.prepareStatement("select * from userinfo where id = ?");
-            preparedStatement.setLong(1, id);
+            String sql = "select * from userinfo where id = ?";
+            Object[] params = new Object[]{id};
+
+            PreparedStatement preparedStatement = con.prepareStatement(sql);
+            for (int i = 0; i < params.length; i++) {
+                preparedStatement.setObject(i+1, params[i]);
+            }
 
             return preparedStatement;
         };
@@ -24,9 +29,13 @@ public class UserDao {
 
     public long add(User user) throws ClassNotFoundException, SQLException {
         StatementStrategy statementStrategy = con -> {
-            PreparedStatement preparedStatement = con.prepareStatement("insert into userinfo(name, password) values (?, ?)");
-            preparedStatement.setString(1, user.getName());
-            preparedStatement.setString(2, user.getPassword());
+            String sql = "insert into userinfo(name, password) values (?, ?)";
+            Object[] params = new Object[]{user.getName(), user.getPassword()};
+
+            PreparedStatement preparedStatement = con.prepareStatement(sql);
+            for (int i = 0; i < params.length; i++) {
+                preparedStatement.setObject(i+1, params[i]);
+            }
 
             return preparedStatement;
         };
@@ -36,10 +45,13 @@ public class UserDao {
 
     public void update(User user) throws SQLException {
         StatementStrategy statementStrategy = con -> {
-            PreparedStatement preparedStatement = con.prepareStatement("UPDATE userinfo SET name=?, password=? WHERE id=?");
-            preparedStatement.setString(1, user.getName());
-            preparedStatement.setString(2, user.getPassword());
-            preparedStatement.setLong(3, user.getId());
+            String sql = "UPDATE userinfo SET name=?, password=? WHERE id=?";
+            Object[] params = new Object[]{user.getName(), user.getPassword(), user.getId()};
+
+            PreparedStatement preparedStatement = con.prepareStatement(sql);
+            for (int i = 0; i < params.length; i++) {
+                preparedStatement.setObject(i+1, params[i]);
+            }
 
             return preparedStatement;
         };
@@ -50,8 +62,13 @@ public class UserDao {
 
     public void delete(Long id) throws SQLException {
         StatementStrategy statementStrategy = con -> {
-            PreparedStatement preparedStatement = con.prepareStatement("DELETE FROM userinfo WHERE id = ?");
-            preparedStatement.setLong(1, id);
+            String sql = "DELETE FROM userinfo WHERE id = ?";
+            Object[] params = new Object[]{id};
+
+            PreparedStatement preparedStatement = con.prepareStatement(sql);
+            for (int i = 0; i < params.length; i++) {
+                preparedStatement.setObject(i+1, params[i]);
+            }
 
             return preparedStatement;
         };

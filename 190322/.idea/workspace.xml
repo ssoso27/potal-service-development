@@ -3,9 +3,11 @@
   <component name="ChangeListManager">
     <list default="true" id="5d438e3d-7ea0-4520-9ecb-3c66d8725dc5" name="Default Changelist" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/kr/ac/jejunu/userdao/AddStatementStrategy.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/kr/ac/jejunu/userdao/AddStatementStrategy.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/kr/ac/jejunu/userdao/GetStatementStrategy.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/kr/ac/jejunu/userdao/GetStatementStrategy.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/kr/ac/jejunu/userdao/UpdateStatementStrategy.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/kr/ac/jejunu/userdao/UpdateStatementStrategy.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/classes/kr/ac/jejunu/userdao/AddStatementStrategy.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/classes/kr/ac/jejunu/userdao/DeleteStatementStrategy.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/classes/kr/ac/jejunu/userdao/GetStatementStrategy.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/classes/kr/ac/jejunu/userdao/UpdateStatementStrategy.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/classes/kr/ac/jejunu/userdao/UserDao.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/classes/kr/ac/jejunu/userdao/UserDao.class" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/kr/ac/jejunu/userdao/UserDao.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/kr/ac/jejunu/userdao/UserDao.java" afterDir="false" />
     </list>
     <ignored path="$PROJECT_DIR$/out/" />
@@ -61,62 +63,12 @@
       <file pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/src/main/java/kr/ac/jejunu/userdao/UserDao.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="329">
-              <caret line="20" column="8" selection-start-line="20" selection-start-column="8" selection-end-line="20" selection-end-column="8" />
+            <state relative-caret-position="192">
+              <caret line="41" column="76" lean-forward="true" selection-start-line="41" selection-start-column="76" selection-end-line="41" selection-end-column="76" />
               <folding>
                 <element signature="imports" expanded="true" />
                 <element signature="e#192#193#0" expanded="true" />
                 <element signature="e#238#239#0" expanded="true" />
-              </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/main/java/kr/ac/jejunu/userdao/AddStatementStrategy.java">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="247">
-              <caret line="15" selection-start-line="15" selection-end-line="15" />
-              <folding>
-                <element signature="imports" expanded="true" />
-              </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/main/java/kr/ac/jejunu/userdao/UpdateStatementStrategy.java">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="247">
-              <caret line="15" selection-start-line="15" selection-end-line="15" />
-              <folding>
-                <element signature="imports" expanded="true" />
-              </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/main/java/kr/ac/jejunu/userdao/DeleteStatementStrategy.java">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="285">
-              <caret line="15" selection-start-line="15" selection-end-line="18" selection-end-column="33" />
-              <folding>
-                <element signature="imports" expanded="true" />
-                <element signature="e#258#259#0" expanded="true" />
-                <element signature="e#286#287#0" expanded="true" />
-              </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/main/java/kr/ac/jejunu/userdao/GetStatementStrategy.java">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="247">
-              <caret line="15" selection-start-line="15" selection-end-line="15" />
-              <folding>
-                <element signature="imports" expanded="true" />
               </folding>
             </state>
           </provider>
@@ -248,7 +200,7 @@
   <component name="PropertiesComponent">
     <property name="WebServerToolWindowFactoryState" value="false" />
     <property name="aspect.path.notification.shown" value="true" />
-    <property name="com.android.tools.idea.instantapp.provision.ProvisionBeforeRunTaskProvider.myTimeStamp" value="1555059340048" />
+    <property name="com.android.tools.idea.instantapp.provision.ProvisionBeforeRunTaskProvider.myTimeStamp" value="1555059643009" />
     <property name="extract.method.default.visibility" value="private" />
     <property name="last_directory_selection" value="$PROJECT_DIR$/src/main/java" />
     <property name="last_opened_file_path" value="$USER_HOME$/Desktop/my-first-project/my-first-project" />
@@ -449,14 +401,11 @@
       <workItem from="1554449379330" duration="7214000" />
       <workItem from="1554456800202" duration="305000" />
       <workItem from="1554457139825" duration="4799000" />
-      <workItem from="1555053369538" duration="5797000" />
+      <workItem from="1555053369538" duration="6098000" />
     </task>
     <servers />
   </component>
   <component name="TestHistory">
-    <history-entry file="UserDaoTests - 2019.04.12 at 16h 29m 09s.xml">
-      <configuration name="UserDaoTests" configurationId="JUnit" />
-    </history-entry>
     <history-entry file="UserDaoTests - 2019.04.12 at 16h 33m 53s.xml">
       <configuration name="UserDaoTests" configurationId="JUnit" />
     </history-entry>
@@ -484,15 +433,18 @@
     <history-entry file="UserDaoTests - 2019.04.12 at 17h 11m 42s.xml">
       <configuration name="UserDaoTests" configurationId="JUnit" />
     </history-entry>
+    <history-entry file="UserDaoTests - 2019.04.12 at 17h 56m 39s.xml">
+      <configuration name="UserDaoTests" configurationId="JUnit" />
+    </history-entry>
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="34073000" />
+    <option name="totallyTimeSpent" value="34374000" />
   </component>
   <component name="ToolWindowManager">
     <frame x="-7" y="-7" width="1550" height="838" extended-state="6" />
     <editor active="true" />
     <layout>
-      <window_info active="true" content_ui="combo" id="Project" order="0" visible="true" weight="0.27919462" />
+      <window_info content_ui="combo" id="Project" order="0" visible="true" weight="0.27919462" />
       <window_info id="Structure" order="1" side_tool="true" weight="0.25" />
       <window_info id="Designer" order="2" />
       <window_info id="Image Layers" order="3" />
@@ -503,7 +455,7 @@
       <window_info anchor="bottom" id="Build" order="1" weight="0.32907802" />
       <window_info anchor="bottom" id="Message" order="2" />
       <window_info anchor="bottom" id="Find" order="3" />
-      <window_info anchor="bottom" id="Run" order="4" weight="0.38723403" />
+      <window_info active="true" anchor="bottom" id="Run" order="4" visible="true" weight="0.2212766" />
       <window_info anchor="bottom" id="Debug" order="5" weight="0.4" />
       <window_info anchor="bottom" id="Cvs" order="6" weight="0.25" />
       <window_info anchor="bottom" id="Inspection" order="7" weight="0.4" />
@@ -635,7 +587,7 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/kr/ac/jejunu/userdao/UpdateStatementStrategy.java">
+    <entry file="file://$PROJECT_DIR$/src/main/java/kr/ac/jejunu/userdao/GetStatementStrategy.java">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="247">
           <caret line="15" selection-start-line="15" selection-end-line="15" />
@@ -655,7 +607,7 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/kr/ac/jejunu/userdao/GetStatementStrategy.java">
+    <entry file="file://$PROJECT_DIR$/src/main/java/kr/ac/jejunu/userdao/UpdateStatementStrategy.java">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="247">
           <caret line="15" selection-start-line="15" selection-end-line="15" />
@@ -667,8 +619,8 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/src/main/java/kr/ac/jejunu/userdao/UserDao.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="329">
-          <caret line="20" column="8" selection-start-line="20" selection-start-column="8" selection-end-line="20" selection-end-column="8" />
+        <state relative-caret-position="192">
+          <caret line="41" column="76" lean-forward="true" selection-start-line="41" selection-start-column="76" selection-end-line="41" selection-end-column="76" />
           <folding>
             <element signature="imports" expanded="true" />
             <element signature="e#192#193#0" expanded="true" />
