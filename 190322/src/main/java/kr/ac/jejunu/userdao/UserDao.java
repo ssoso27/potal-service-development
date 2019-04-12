@@ -21,8 +21,8 @@ public class UserDao {
         try {
             con = dataSource.getConnection();
 
-            StatementStrategy statementStrategy = new GetStatementStrategy();
-            statementStrategy.makePrepareStatement(id, con);
+            StatementStrategy statementStrategy = new GetStatementStrategy(id);
+            preparedStatement = statementStrategy.makePrepareStatement(con);
 
             resultSet = preparedStatement.executeQuery();
 
@@ -71,8 +71,8 @@ public class UserDao {
         try {
             con = dataSource.getConnection();
 
-            StatementStrategy statementStrategy = new AddStatementStrategy();
-            preparedStatement = statementStrategy.makePrepareStatement(user, con);
+            StatementStrategy statementStrategy = new AddStatementStrategy(user);
+            preparedStatement = statementStrategy.makePrepareStatement(con);
 
             preparedStatement.executeUpdate();
 
@@ -107,8 +107,8 @@ public class UserDao {
         try {
             con = dataSource.getConnection();
 
-            StatementStrategy statementStrategy = new UpdateStatementStrategy();
-            preparedStatement = statementStrategy.makePrepareStatement(user, con);
+            StatementStrategy statementStrategy = new UpdateStatementStrategy(user);
+            preparedStatement = statementStrategy.makePrepareStatement(con);
 
             preparedStatement.executeUpdate();
         } finally {
@@ -139,8 +139,8 @@ public class UserDao {
         try {
             con = dataSource.getConnection();
 
-            StatementStrategy statementStrategy = new DeleteStatementStrategy();
-            preparedStatement = statementStrategy.makePrepareStatement(id, con);
+            StatementStrategy statementStrategy = new DeleteStatementStrategy(id);
+            preparedStatement = statementStrategy.makePrepareStatement(con);
 
             preparedStatement.executeUpdate();
         } finally {

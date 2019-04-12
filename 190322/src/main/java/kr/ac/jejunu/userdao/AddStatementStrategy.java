@@ -5,10 +5,14 @@ import java.sql.PreparedStatement;
 import java.sql.SQLException;
 
 public class AddStatementStrategy implements StatementStrategy {
-    @Override
-    public PreparedStatement makePrepareStatement(Object object, Connection con) throws SQLException {
-        User user = (User) object;
+    private User user;
 
+    public AddStatementStrategy(User user) {
+        this.user = user;
+    }
+
+    @Override
+    public PreparedStatement makePrepareStatement(Connection con) throws SQLException {
         PreparedStatement preparedStatement = con.prepareStatement("insert into userinfo(name, password) values (?, ?)");
         preparedStatement.setString(1, user.getName());
         preparedStatement.setString(2, user.getPassword());
