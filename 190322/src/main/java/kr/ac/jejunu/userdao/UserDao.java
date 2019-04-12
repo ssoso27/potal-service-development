@@ -141,8 +141,8 @@ public class UserDao {
         try {
             con = dataSource.getConnection();
 
-            preparedStatement = con.prepareStatement("DELETE FROM userinfo WHERE id = ?");
-            preparedStatement.setLong(1, id);
+            StatementStrategy statementStrategy = new DeleteStatementStrategy();
+            preparedStatement = statementStrategy.makePrepareStatement(id, con);
 
             preparedStatement.executeUpdate();
         } finally {
