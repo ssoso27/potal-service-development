@@ -12,9 +12,9 @@ import javax.sql.DataSource;
 import java.sql.*;
 
 public class UserDao {
-    private final JdbcTemplate jdbcTemplate;
+    private final JejuJdbcTemplate jdbcTemplate;
 
-    public UserDao(JdbcTemplate jdbcTemplate) {
+    public UserDao(JejuJdbcTemplate jdbcTemplate) {
         this.jdbcTemplate = jdbcTemplate;
     }
 
@@ -39,21 +39,7 @@ public class UserDao {
     public long add(User user) throws ClassNotFoundException, SQLException {
         String sql = "insert into userinfo(name, password) values (?, ?)";
         Object[] params = new Object[]{user.getName(), user.getPassword()};
-        KeyHolder keyHolder = new GeneratedKeyHolder();
-
-        jdbcTemplate.update(new PreparedStatementCreator() {
-            @Override
-            public PreparedStatement createPreparedStatement(Connection con) throws SQLException {
-                PreparedStatement preparedStatement
-                        = con.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);
-                for (int i = 0; i < params.length; i++) {
-                    preparedStatement.setObject(i+1, params[i]);
-                }
-                return preparedStatement;
-            }
-        }, keyHolder);
-
-        return keyHolder.getKey().longValue();
+        return jdbcTemplate.insert(sql, params);
     }
 
     public void update(User user) throws SQLException {
