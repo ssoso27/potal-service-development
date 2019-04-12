@@ -16,18 +16,8 @@ public class UserDao {
         return jdbcContext.jdbcContextForGet(statementStrategy);
     }
 
-    private User jdbcContextForGet(StatementStrategy statementStrategy) throws SQLException {
-
-        return jdbcContext.jdbcContextForGet(statementStrategy);
-    }
-
     public long add(User user) throws ClassNotFoundException, SQLException {
         StatementStrategy statementStrategy = new AddStatementStrategy(user);
-        return jdbcContext.jdbcContextForAdd(statementStrategy);
-    }
-
-    private long jdbcContextForAdd(StatementStrategy statementStrategy) throws SQLException {
-
         return jdbcContext.jdbcContextForAdd(statementStrategy);
     }
 
@@ -40,16 +30,6 @@ public class UserDao {
     public void delete(Long id) throws SQLException {
         StatementStrategy statementStrategy = new DeleteStatementStrategy(id);
         jdbcContext.jdbcContextForUpdate(statementStrategy);
-    }
-
-    private void jdbcContextForUpdate(StatementStrategy statementStrategy) throws SQLException {
-
-        jdbcContext.jdbcContextForUpdate(statementStrategy);
-    }
-
-    public Long getLasttInsertId(Connection connection) throws SQLException {
-
-        return jdbcContext.getLasttInsertId(connection);
     }
 
     Connection getConnection() throws ClassNotFoundException, SQLException {
