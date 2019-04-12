@@ -13,6 +13,11 @@ public class UserDao {
     }
 
     public User get(Long id) throws ClassNotFoundException, SQLException {
+        StatementStrategy statementStrategy = new GetStatementStrategy(id);
+        return jdbcContextForGet(statementStrategy);
+    }
+
+    private User jdbcContextForGet(StatementStrategy statementStrategy) throws SQLException {
         Connection con = null;
         PreparedStatement preparedStatement = null;
         ResultSet resultSet = null;
@@ -21,7 +26,6 @@ public class UserDao {
         try {
             con = dataSource.getConnection();
 
-            StatementStrategy statementStrategy = new GetStatementStrategy(id);
             preparedStatement = statementStrategy.makePrepareStatement(con);
 
             resultSet = preparedStatement.executeQuery();
@@ -63,6 +67,11 @@ public class UserDao {
     }
 
     public long add(User user) throws ClassNotFoundException, SQLException {
+        StatementStrategy statementStrategy = new AddStatementStrategy(user);
+        return jdbcContextForAdd(statementStrategy);
+    }
+
+    private long jdbcContextForAdd(StatementStrategy statementStrategy) throws SQLException {
         Connection con = null;
         PreparedStatement preparedStatement = null;
         ResultSet resultSet = null;
@@ -71,7 +80,6 @@ public class UserDao {
         try {
             con = dataSource.getConnection();
 
-            StatementStrategy statementStrategy = new AddStatementStrategy(user);
             preparedStatement = statementStrategy.makePrepareStatement(con);
 
             preparedStatement.executeUpdate();
@@ -99,39 +107,17 @@ public class UserDao {
     }
 
     public void update(User user) throws SQLException {
-        Connection con = null;
-        PreparedStatement preparedStatement = null;
-        ResultSet resultSet = null;
-        Long id = null;
-
-        try {
-            con = dataSource.getConnection();
-
-            StatementStrategy statementStrategy = new UpdateStatementStrategy(user);
-            preparedStatement = statementStrategy.makePrepareStatement(con);
-
-            preparedStatement.executeUpdate();
-        } finally {
-            if (preparedStatement != null) {
-                try {
-                    preparedStatement.close();
-                } catch (SQLException e) {
-                    e.printStackTrace();
-                }
-            }
-
-            if (con != null) {
-                try {
-                    con.close();
-                } catch (SQLException e) {
-                    e.printStackTrace();
-                }
-            }
-        }
+        StatementStrategy statementStrategy = new UpdateStatementStrategy(user);
+        jdbcContextForUpdate(statementStrategy);
     }
 
 
     public void delete(Long id) throws SQLException {
+        StatementStrategy statementStrategy = new DeleteStatementStrategy(id);
+        jdbcContextForUpdate(statementStrategy);
+    }
+
+    private void jdbcContextForUpdate(StatementStrategy statementStrategy) throws SQLException {
         Connection con = null;
         PreparedStatement preparedStatement = null;
         ResultSet resultSet = null;
@@ -139,7 +125,6 @@ public class UserDao {
         try {
             con = dataSource.getConnection();
 
-            StatementStrategy statementStrategy = new DeleteStatementStrategy(id);
             preparedStatement = statementStrategy.makePrepareStatement(con);
 
             preparedStatement.executeUpdate();
