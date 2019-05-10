@@ -4,8 +4,10 @@ import lombok.extern.slf4j.Slf4j;
 
 import javax.servlet.ServletRequestEvent;
 import javax.servlet.ServletRequestListener;
+import javax.servlet.annotation.WebListener;
 
 // 각 리스너마다 처리할게 다르므로 인터페이스 생긴게 다름
+@WebListener
 @Slf4j
 public class HelloRequestListener implements ServletRequestListener {
     @Override

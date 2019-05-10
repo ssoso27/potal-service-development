@@ -4,7 +4,9 @@ import lombok.extern.slf4j.Slf4j;
 
 import javax.servlet.ServletContextEvent;
 import javax.servlet.ServletContextListener;
+import javax.servlet.annotation.WebListener;
 
+@WebListener
 @Slf4j
 public class HelloContextListener implements ServletContextListener {
     // 듣고 있다가 context가 초기화 될때
