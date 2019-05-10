@@ -7,6 +7,9 @@ import javax.servlet.annotation.WebServlet;
 import java.io.IOException;
 
 @WebServlet(urlPatterns = "/hello")
+// 서블릿을 그대로 마이그레이션 하기 위해서.
+// 이 어댑터를 꽂으면, 다른 어댑터가 동작을 안 함; (디폴트는 하나봄)
+//@Controller("/servlet")
 @Slf4j
 public class HelloServlet extends GenericServlet {
     @Override
