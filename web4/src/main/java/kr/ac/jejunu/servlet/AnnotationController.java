@@ -12,8 +12,9 @@ public class AnnotationController {
 
     // @RequestMapping 을 받은 애가 핸들러가 됨.
     @RequestMapping("/hello") // url : /annotation/hello
-    public String hello() {
-        return "helloworld"; // InternalResourceViewReslover -> hello.jsp 찾아감 -> 띄움
+    public String hello() { // return이 String : view name을 직접 지정해주겠다는 뜻
+        return "helloworld";  // view name = helloworld
+        // InternalResourceViewReslover -> helloworld.jsp 찾아감 -> 띄움
     }
 
     @RequestMapping("/hello2") // url : /annotation/hello2
