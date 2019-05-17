@@ -1182,7 +1182,7 @@ reponse가 나가기 전에, 뒤에서 한번 걸러주고, (후처리)
           </filter-mapping>
       ~~~
 
-![001](.\사진\001.png)
+![001](.\pics\001.png)
 
 ### Listener
 
@@ -1222,7 +1222,7 @@ reponse가 나가기 전에, 뒤에서 한번 걸러주고, (후처리)
    1. context 로딩, 이벤트, 모니터링 솔루션 등...
    2. 서버 상태가 어떤 상태지 알아야 할때 -> 리스너 이벤트를 통해서 암
 
-![002](.\사진\002.png)
+![002](.\pics\002.png)
 
 
 
@@ -1495,3 +1495,90 @@ root Servlet : dispatcher
 그래서 /hello에서는 hello servlet이, 그 외의 url 에서는 dispatcher (root)가 실행됨.
 
 (그리고 hello servlet은 어노테이션으로 url을 지정해줘서, 좀 더 명시적이라 우선순위 더 높다?)
+
+---
+
+## [10] 19.05.17
+
+### Content Negotaiating View Reslover
+
+request(url.js) -> response (json)
+
+특정 미디어 타입에 따라, 결과를 다르게 뱉어주려고 설계된 방식
+
+어떤 view랑 매핑을 해줄까? 하고 협상함
+
+- mediaTypes 
+  - .js 확장자면 -> application/json으로 보여줄게
+  - .xml 확장자면 -> application/xml으로 보여줄게
+- defaultViews
+  - json을 보여줄때 사용할 view 설정
+  - xml을 보여줄 때 사용할 view 설정
+- viewReslovers
+  - defaultViews가 아닌 애들을 보여줄 view 설정
+  - **Internal Result View Reslover**를 탐 
+
+
+
+### EtcReslover
+
+1. HandlerExceptionReslover
+   1. View를 해석해주는 애는 아님. (= View Reslover가 아니다.)
+   2. Exception이 떨어짐 (ex : 500 error! ) -> exception 떨어진걸 캐치 -> 특정 view로 보내줌 (ex: 에러 안내 화면)
+2. MultipartReslover
+   1. View를 해석해주는 애는 아님. (= View Reslover가 아니다.)
+   2. Multipart request 
+      1. 모든 request는 string. (ex: query, body)
+      2. 그러나 파일은 byte임. 
+   3. 요청 자체를 처리하는 느낌?
+   4. 파일 업로드시 byte를 -> file로 변경해주는 역할을 함.
+
+
+
+### Build 패턴
+
+@Builder : Obejct를 생성하기 위한 기본 패턴. (lombok)
+
+Object 자체를 쉽게 만들어주기 위한 하나의 패턴.
+
+// 생성 대상이 @Builder라면, 이렇게 쉽게 생성해줄 수 있음
+
+~~~java
+User user = User.builder().id(1).name("hulk").password("1234").build();
+~~~
+
+
+
+### Exception
+
+Runtime Exception은 다른 exception과 달리, throw를 안 받아도 됨. 그래서 자주 씀 ㅇ.< 
+
+
+
+### ExceptionHandler
+
+~~~java
+@Controller
+@RequestMapping("/user")
+public class UserController {
+   ...
+
+    @RequestMapping("/error")
+    public void error() {
+        throw new RuntimeException("runtime exception");
+    }
+
+    @ExceptionHandler(Exception.class) // 어떤 Exception이 떨어졌을때 인지도 설정할 수 있음
+    public ModelAndView errorPage(Exception e) {
+        ModelAndView modelAndView = new ModelAndView("error");
+        modelAndView.addObject("e", e);
+        return modelAndView;
+    }
+}
+
+~~~
+
+
+
+dispatcher 서블릿 찾고 -> handler exception revloser누군지 찾아준 후 -> 핸들러어댑터 실행 하다가 -> 에러 나면 -> handler excption reslover에 의하여 -> 누가 익셉션핸들러인지 찾고 -> 걔한테 던져줌
+

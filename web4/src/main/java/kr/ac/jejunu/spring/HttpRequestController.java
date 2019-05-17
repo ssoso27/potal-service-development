@@ -1,4 +1,4 @@
-package kr.ac.jejunu.servlet;
+package kr.ac.jejunu.spring;
 
 import org.springframework.stereotype.Controller;
 import org.springframework.web.HttpRequestHandler;

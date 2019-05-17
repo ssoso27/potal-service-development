@@ -1,4 +1,4 @@
-package kr.ac.jejunu.servlet;
+package kr.ac.jejunu.spring;
 
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.mvc.Controller;
