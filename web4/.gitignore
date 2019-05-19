@@ -89,3 +89,4 @@ fabric.properties
 target/
 
 # End of https://www.gitignore.io/api/intellij,java-web
+build/

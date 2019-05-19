@@ -1537,15 +1537,27 @@ request(url.js) -> response (json)
 
 ### Build 패턴
 
-@Builder : Obejct를 생성하기 위한 기본 패턴. (lombok)
+Obejct를 생성하기 위한 기본 패턴. (lombok)
 
 Object 자체를 쉽게 만들어주기 위한 하나의 패턴.
+
+##### @Builder 
 
 // 생성 대상이 @Builder라면, 이렇게 쉽게 생성해줄 수 있음
 
 ~~~java
 User user = User.builder().id(1).name("hulk").password("1234").build();
 ~~~
+
+
+
+##### @NoArgsConstructor
+
+new User(); 처럼, 파라미터 없는 버전으로 만들 수 있음?
+
+##### @AllArgsConstructor
+
+모든 속성을 넣은 버전도 만들 수 있음?
 
 
 
@@ -1578,7 +1590,496 @@ public class UserController {
 
 ~~~
 
-
-
 dispatcher 서블릿 찾고 -> handler exception revloser누군지 찾아준 후 -> 핸들러어댑터 실행 하다가 -> 에러 나면 -> handler excption reslover에 의하여 -> 누가 익셉션핸들러인지 찾고 -> 걔한테 던져줌
 
+
+
+### Multipart Handler 
+
+주로 파일 업로드시 사용
+
+[upload.jsp]
+
+~~~ jsp
+df
+~~~
+
+
+
+[controller]
+
+~~~java
+    ...
+    @RequestMapping(value = "/upload", method = RequestMethod.GET)
+    public String uploadpage() {
+        return "upload";
+    }
+
+    // @RequestParam : query param이나 form이 전달해준 애들을 받아옴 (name = param 이름 혹은 value name)
+    // @HttpServletRequest : 이거 하면 알아서 request가 넘어오는데, 저장한 file path를 정하기 위해 받아왔음
+    @RequestMapping(value = "/upload", method = RequestMethod.GET)
+    public ModelAndView upload(@RequestParam("file") MultipartFile file, HttpServletRequest request) throws IOException {
+        // [file 선언]
+        // 저장위치와 이름을 지정하여, 특정 위치에 (임시)파일을 생성해둠
+        File path = new File(
+                request.getServletContext().getRealPath("/") // 실제 servlet이 돌아가는 환경을 얻고, 돌아가는 was상의 파일 위치를 가져옴
+                        + "/WEB-INF/static/"
+                        + file.getOriginalFilename() // 업로드 된 파일 이름
+        );
+
+        // [file write]
+        // path에 파일을 output 해줌 (= 저장해줌?)
+        // buffer로 한번 감싸주는 이유
+        /// file Output steam만 하면, file 사이즈 만큼 file io를 일일이 태움 -> 느림
+        /// buffer output stream을 만들면, buffer 사이즈 만큼의 메모리에 넣고, 걔네를 통째로 io. -> 빠름
+        FileOutputStream fileOutputStream = new FileOutputStream(path);
+        BufferedOutputStream bufferedOutputStream = new BufferedOutputStream(fileOutputStream);
+        bufferedOutputStream.write(file.getBytes()); // write
+        bufferedOutputStream.close(); // buffer 닫아주기!
+
+        ModelAndView modelAndView = new ModelAndView("upload");
+        modelAndView.addObject("url", "/images/" + file.getOriginalFilename()); // /images/**의 위치를 디스패처 xml에서 매핑 해주어야함!
+        return modelAndView;
+    }
+	...
+~~~
+
+
+
+#### 파일 업로드
+
+어떠한 이유로 인해 (권한문제였나... jar 까기도 힘들댔음) 우리 코드처럼 app에서 직접 upload 하는 경우는 별로 없음.
+
+보통은 따로 파일 업로드 서비스나, 또다른 서버 (ex 아파치)를 띄워서, 아파치 서버의 특정 경로에는 파일이 읽어지게 만듬.
+
+​	-> 아파치와 톰캣을 같이 쓰는 경우가 많음.
+
+  - 아파치 : 웹서버의 역할. 리소스 전달 & 여러가지 필터링 해주는 역할
+  - ajp라는 프로토콜로 소통함
+      - 서비스 서버랑 웹서버를 같이 쓰는데, 둘이 소통하기에는 http 는 너무 느림.
+      - 그래서 걍 더 빠른 애로 쓰는듯?
+
+
+
+##### IO를 어떻게 할까?
+
+1. Stream
+
+   1. 개념
+
+      - 물이 흐르듯, input과 output이 각각 단방향으로만 작용
+
+      - 그래서 input과 output 스트림이 따로 있음
+
+   2. 데이터 처리 단위 : byte 
+
+   3. 동작 과정
+
+      1. IO 마다 스레드 생성 (in JVM)
+      2. 이 때, IO은 OS 환경에서 동작하므로, 
+      3. (IO 마다) JVM이 컨텍스트 스위칭을 진행
+
+   4. ==> 느림
+
+   5. 자바는 보통 스레드로 동작하는데(in jvm) , io는 os환경에서 동작함
+
+      1. => jvm이 context switching을 해주어야함 => 느림
+
+   6. 단점 : 스레드 안의 io가 context switching이 계속 발생 => 느림
+
+2. Channel
+
+   1. 개념 
+
+      - 통로(채널)를 하나 만들어서, input ouput을 쓰는 개념.
+
+   2. 데이터 처리 단위 : buffer
+
+      - buffer 메모리에 의해서 흘려서 처리해 줌
+
+   3. 동작 과정
+
+      1. 채널을 딱 만들어 놓고,
+
+      2. 채널에 데이터를 흘려보내줌
+
+      3. 스레드 없이, 이 자체에서 네이티브 라이브러리를 콜해서, async로 활용. (스레드 여러개 안생김)
+
+         
+
+   4. new IO는 이런 채널로 구현이 됨
+
+   5. 채널에 데이터를 흘려보내줌
+
+   6. 데이터 단위 : buffer 
+
+      - 
+
+   7. => IO 처리가 빠름
+
+   8. 그래서 보통 NIO로 io 처리 해줌
+
+   9. 채널을 딱 만들어놓고,
+
+   10. os에 있는 녀석들을 직접 처리해줌 (jvm 안통함!) -> 빠름 
+
+3. nio 
+
+   1. 논블럭킹통신
+
+4. 논블럭킹
+
+   1. 블럭킹하지 않겠다. 
+   2. 얘까 실항 끝날때까지 대기 안할거야. 다른거 할거야.
+
+5. 블럭킹
+
+   1. 얘가 실행이 끝날때까지 대기하겠다!
+
+6. 어싱크로너스
+
+   1. 비동기 방식으로 처리하겠다.
+   2. 얘까 처리 되고있는지는 모르겠는데, 특정 프로세스를 위임하고 나는 다른거 할거야.
+
+7. 하나의 스레드로 db 쿼리를 날렸을때,
+
+   1. 어싱크로너스로 보내고 다른처리 함 
+      1. 어싱크로너스.
+      2. 블럭킹
+   2. DB 는 블럭킹이다.
+      1. db 처리 스레드는, 무조건 블럭킹이다. (논블럭킹 지원이 지금 몽고db뿐임)
+
+
+
+#### 오류해결
+
+문제 : /user/get 하면 404 error 남.
+
+로그를 찍어보자!
+
+- bean, reslover 등 등록 잘 됨
+
+- 어라? Handler 가 Simple Url Handler네?
+
+  - Defulat 핸들러가 아니면 ... 머시기...
+
+- 우선순위를 잘 설정해주자. 심플 말고 디폴트 핸들러로 가게.
+
+  - ~~~xml
+    [web.xml]
+    ...
+    <annotation-driven/>
+    ...
+    ~~~
+
+
+
+#### 파일은 어디로 갔는가?
+
+서비스 배포된 곳 (ex: Tomcat)에 존재함.
+
+만약 빌드가 잘 안된다? -> Gradle -> Task -> build -> clean으로 빌드 다 날려라.
+
+
+
+### Interceptor
+
+서블릿의 필터와 비슷한 개념.
+
+1. 메소드
+
+   1. preHandle
+      - reslover 호출하기 전에 (= view 호출하기 전에.)
+      - 데이터 처리하기 전에 있는 녀석을, 필터해주고, 
+   2. postHandler
+      - 데이터 처리 후.
+      - modelAndView를 얻어서, 하고싶은거 해줌.
+   3. aftercompletion
+      - 다 끝나고 최종.
+      - Exception 얻어서, 할것 해줌.
+
+2. 쓰임
+
+   1. 로그인 됐는지 안됐는지 할때 자주 쓸듯?
+
+3. 사용해보기
+
+   1. Interceptor 만들어주기
+
+      1. [UserInterceptor.java]
+
+         ~~~java
+         @Slf4j
+         public class UserInterceptor implements HandlerInterceptor {
+             @Override
+             public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {
+                 log.info("**************************preHandle");
+                 return true; // true로 해야, 실제 controller까지 넘어감.
+             }
+         
+             @Override
+             public void postHandle(HttpServletRequest request, HttpServletResponse response, Object handler, ModelAndView modelAndView) throws Exception {
+                 log.info("************************postHandle");
+             }
+         
+             @Override
+             public void afterCompletion(HttpServletRequest request, HttpServletResponse response, Object handler, Exception ex) throws Exception {
+                 log.info("************************afterCompletion");
+             }
+         }
+         ~~~
+
+         
+
+   2. 어떤 경로로 들어오는 놈들인지 매핑 
+
+### < annotation-driven />
+
+- annotation 기반의 모든 기능을 쓰겠다. 우선순위도 제일 높게 설정하겠다!
+
+- Spring MVC에서 request 에 대한 각종 처리들을 해주는 녀석?
+  - ex) 프로퍼티 에디터, 데이터 바인딩, 넘버 포맷, 리퀘스트 바디, 익셉션 핸들러, ... 
+- Spring은 request는 servlet 규약에 의해 전달됨. 모든 파라미터나 헤더 등은 string 기반으로 전달. -> string으로 전달된 걸 object로 매핑하고 싶어! (ex: 날짜, 숫자 등등)
+  - 컨버전 서비스 : 이런 것들을 object로 매핑해줌
+  - 데이터 바인딩 : 리퀘스트 -> 오브젝트로 변환
+- 얘 이전에는, 일일이 bean으로 ... 설정해줌 .... (으아악!)
+
+
+
+### @RequestMapping
+
+특정 패스가 들어오면, 어떤 클래스에 어떤 메소드를 매핑할 것이냐.
+
+Class Mapping + Method Mapping
+
+- 속성 (속성 일치하는 애들을 매핑)
+
+  - path
+
+  - method
+
+  - params
+
+  - headers
+
+    - 시큐리티 관련해서 많이 씀.
+
+  - consumes
+
+    - 소비자
+
+    - 요청하는 애가 json을 필요로 하면 매핑해줘.
+
+    - ~~~java
+      @RequestMappgin(path="/user/add", consumes="application/json")
+      ~~~
+
+    - validate에 많이 씀
+
+  - produces
+
+    - 생산자
+
+    - response를 json으로 받고자 하는 애들을 매핑해줘.
+
+    - ~~~java
+      @RequestMappgin(path="/user/add", produces="application/json")
+      ~~~
+
+    - validate에 많이 씀
+
+- method 미리 지정한 버전
+
+  - @GetMapping
+  - @PostMapping
+  - @PutMapping
+  - @DeleteMapping
+
+
+
+### @Controller (Method Pattern)
+
+1. 속성
+
+   1. HttpServletRequest
+
+      1. request 그대로 받음
+
+   2. HttpServletResponse
+
+      1. response 그대로 받음
+
+   3. HttpSession
+
+      1. session 그대로 받음
+
+   4. @PathVariable
+
+      1. path에 있는 변수 받아옴
+
+         ~~~java
+         ...
+             @GetMapping("/get/id/{id}/name/{name}")
+             public ModelAndView path(@PathVariable("id") Integer id, @PathVariable("name") String name) {
+                 User user = User.builder().id(id).name(name).build();
+                 ModelAndView modelAndView = new ModelAndView("user");
+                 modelAndView.addObject("user", user);
+                 return modelAndView;
+             }
+         ...
+         ~~~
+
+      2. 검색어 입력시에는 쓰지 않음. string이니까!! (특수문자 등에서 오류 발생)
+
+   5. @RequestParam
+
+      1. 리퀘스트에 query param으로 들어오는 애를 정의
+
+         ~~~java
+         ...
+             @RequestMapping("/get")
+             public ModelAndView get(@RequestParam("id") Integer id, @RequestParam("name") String name) {
+                 User user = User.builder().id(id).name(name).password("1234").build();
+                 ModelAndView modelAndView = new ModelAndView("user");
+                 modelAndView.addObject("user", user);
+                 return modelAndView;
+             }
+         ...
+         ~~~
+
+   6. @CookieValue
+
+      1. 쿠키에 저장된 값 가져옴
+
+      ~~~java
+          ...
+              // required : 필수 여부
+              @RequestMapping("/cookie")
+              public ModelAndView cookie(@CookieValue(value = "id", defaultValue = "4") Integer id, @CookieValue(value = "name", required = false) String name) {
+                  User user = User.builder().id(id).name(name).password("1234").build();
+                  ModelAndView modelAndView = new ModelAndView("user");
+                  modelAndView.addObject("user", user);
+                  return modelAndView;
+              }
+          ...
+      ~~~
+
+      2. 쿠키 굽는 방법
+
+         1. response 정보를 받아다가 굽는다
+
+         2. ~~~java
+            public ModelAndView get(@RequestParam("id") Integer id, @RequestParam("name") String name, HttpServletResponse response) {
+                User user = User.builder().id(id).name(name).password("1234").build();
+            
+                // response에서 정보 따서 쿠키를 구움
+                response.addCookie(new Cookie("id", id.toString()));
+                response.addCookie(new Cookie("name", name));
+            ~~~
+
+   7. Map, Model, ModelMap
+
+      1. response에 데이터를 감싸서 넘겨줄 때, 이 친구를 사용해서 넘겨줌. (method가 model 받아서 처리하는게 아님!!!)
+
+         ~~~java
+             @RequestMapping("/model")
+             public String model(Model model) {
+                 User user = User.builder().id(1).name("sohee").password("aaaa").build();
+                 model.addAttribute("user", user);
+                 return "user"; // view mapping
+             }
+         ~~~
+
+      2. Model과 ModelMap의 차이
+
+         1. 
+
+   8. @ModelAttribute
+
+      1. response 할 object를 미리 만들어주고 그거 갖다 쓸거야!
+
+         ~~~java
+         @RequestMapping("/model")
+         public String model(@ModelAttribute User user) {
+             user.setId(4);
+             user.setName("hahahoho");
+             return "user"; // view mapping
+         }
+         ~~~
+
+      2. request 파라미터도 mapping 해줌
+
+         ~~~java
+             @RequestMapping("/model")
+             public String model(@ModelAttribute User user) {
+                 return "user"; // view mapping
+             }
+         ~~~
+
+      3. 심지어 생략도 가능함;
+
+         ~~~java
+         @RequestMapping("/model")
+         public String model(User user) { // @ModelAttribute
+         	return "user"; // view mapping
+         }
+         
+         ~~~
+
+### Controller (Method Return)
+
+1. void
+
+   reslover 탐
+
+2. String
+
+   - View Name 
+
+   - Redirect :
+
+     - 아예 새롭게 특정 페이지로 보냄
+
+     - 얘의 reqeust, response, context ... 는 새로운 페이지에서 새로 받음
+
+     - ~~~java
+       @RequestMapping("/redirect")
+       public String redirect() {
+           // redirect string 
+           return "redirect:/user/upload";
+       }
+       ~~~
+
+   - Forward:
+
+     - 자기가 가진 request, response를 path에 그대로 전달해줌 (전이)
+
+     - request, response를 전이하며, 마치 하나의 서블릿인거처럼 함
+
+     - 자기 url도 안 바뀌고, 자기 페이지인거 처럼 함
+
+     - ~~~java
+       @RequestMapping("/forward")
+       public String foarward() {
+           // forward string 
+           return "forward:/user/upload";
+       }
+       ~~~
+
+3. ModelAndView
+
+4. Map, Model, ModelMap
+
+5. View
+
+   reslover 안 타고, url path가 view name으로 매핑된다.
+
+
+
+#### 다음주
+
+- 세션, 세션애트리뷰트
+- Spring MVC에서 디스패처 서블릿, web.xml 등 다 제거 
+  - 오로지 코드로만 동작되는 web app 환경으로 만들어볼것
+- 파일 업로드 부분 실습
+- 숙제 발표
