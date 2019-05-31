@@ -1,5 +1,7 @@
 package kr.ac.jejunu.user.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import lombok.*;
 
 import javax.persistence.*;
@@ -20,5 +22,7 @@ public class User {
 
     @OneToMany
     @JoinColumn(name = "userinfo_id")
+//    @JsonIgnore // Json 생성을 안함.
+    @JsonIgnoreProperties(value={"user"}) // json 생성은 할건데, 이 오브젝트 하위의 depth를 중지시킬거야.
     private List<Comment> comments;
 }
