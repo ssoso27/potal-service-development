@@ -27,7 +27,8 @@ public class HibernateTests {
 
         Configuration configuration = new Configuration()
                 .configure("jejunu.cfg.xml")
-                .addResource("User.hbm.xml");
+                .addResource("User.hbm.xml")
+                .addResource("Comment.hbm.xml");
 
         // 서비스를 활용할 떄 어떻게 할 것인가? 를 등록하는 역할
         final StandardServiceRegistry registry =
