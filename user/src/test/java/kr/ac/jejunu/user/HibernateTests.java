@@ -57,6 +57,19 @@ public class HibernateTests {
         session.close();
     }
 
+    @Test
+    public void saveUser() {
+        Session session = sessionFactory.openSession();
+        User user = User.builder().name("abcd").password("111").build();
+        session.save(user); // 쿼리 생성
+
+        User saveUser = session.get(User.class, user.getId()); // 쿼리 안생성. 캐시 씀.
+        assertThat(saveUser.getName(), is(user.getName()));
+        assertThat(saveUser.getPassword(), is(user.getPassword()));
+
+        session.close();
+    }
+
     public static void destory() {
         sessionFactory.close();
     }
