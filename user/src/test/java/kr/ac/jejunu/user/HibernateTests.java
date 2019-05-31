@@ -1,5 +1,6 @@
 package kr.ac.jejunu.user;
 
+import kr.ac.jejunu.user.model.Comment;
 import kr.ac.jejunu.user.model.User;
 import org.hibernate.HibernateException;
 import org.hibernate.Session;
@@ -27,8 +28,8 @@ public class HibernateTests {
 
         Configuration configuration = new Configuration()
                 .configure("jejunu.cfg.xml")
-                .addResource("User.hbm.xml")
-                .addResource("Comment.hbm.xml");
+                .addAnnotatedClass(User.class)
+                .addAnnotatedClass(Comment.class);
 
         // 서비스를 활용할 떄 어떻게 할 것인가? 를 등록하는 역할
         final StandardServiceRegistry registry =
