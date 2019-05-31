@@ -2083,3 +2083,126 @@ Class Mapping + Method Mapping
   - 오로지 코드로만 동작되는 web app 환경으로 만들어볼것
 - 파일 업로드 부분 실습
 - 숙제 발표
+
+---
+
+## [11] 19.05.24
+
+수업 못들음 ㅜㅜ 
+
+
+
+Web관련 Context
+
+1. XmlWebApp...
+2. AnnotationConfigWebApp...
+
+
+
+### xml 제거하고 써보기
+
+#### 1. Context Class 변경
+
+현재까진 기본인 xml web...을 썼는데, annotation 쓸거임 (AnnotationConfigWebAppliationContext)
+
+변경하고 web.xml에 적용
+
+
+
+#### 2. web.xml 지우기
+
+1. 일단 지우고
+
+2. WebApplicationInitializer 만들기
+
+   1. 현재까지는 web.xml을 통해서 디스패쳐 서블릿으로 갔지만, 이젠 아직 서블릿이 없음
+   2. 이 친구가 자동으로 서블릿을 등록하고 실행할 수 있는 환경을 만들어줌?
+
+3. web.xml에 있떤거 : servlet 정의 -> context, configration 정의
+
+4. ~~~java
+   // web.xml 없이 하기!
+   public class WebInitializer implements WebApplicationInitializer {
+       @Override
+       public void onStartup(ServletContext servletContext) throws ServletException {
+           // servletContext : 이미 정의되어 있음. 여기다가 서블릿 넣자!
+           AnnotationConfigWebApplicationContext context = new AnnotationConfigWebApplicationContext(); // context 만들고
+           context.scan("kr.ac.jejunu"); // context에다가 얘(전부)를 스캔할 수 있도록 지정 -> @bean @configraution 등록
+           ServletRegistration.Dynamic servletRegistration = servletContext.addServlet("dispatcher"
+                   , new DispatcherServlet(context)); // annotation으로 정의한 config 꽂기
+           servletRegistration.setLoadOnStartup(1); // load startup 지정
+           servletRegistration.addMapping("/"); // 어떤 url과 매핑? -> 모든 url 꽂도록 지정
+       }
+   }
+   
+   ~~~
+
+### REST
+
+url 자체에 설계를 담아보자! 얘만 보면 바로 뭔지 알 수 있게!
+
+request -> url로 명세, http method로 행위
+
+response -> http code로 상태 정의 (ex: 200 OK)
+
+
+
+#### Get
+
+~~~java
+@Controller
+@RequestMapping("/rest")
+public class RestController {
+    @GetMapping(value = "{id}", produces = MediaType.APPLICATION_JSON_VALUE) // json으로 보내줌
+    @ResponseBody // 얘가 없으면? -> resolver를 탄다
+    public User get(@PathVariable("id") Integer id) {
+        return User.builder().id(id).name("sohee").password("1212").build();
+    }
+}
+~~~
+
+
+
+#### json으로 보내기
+
+1. Mapping 에서 produces 설정
+
+   ~~~java
+   @GetMapping(value = "{id}", produces = MediaType.APPLICATION_JSON_VALUE) // json으로 보내줌
+   ~~~
+
+   
+
+2. config에 명시
+
+   ~~~java
+   public class WebConfig implements WebMvcConfigurer {
+       @Override
+       public void configureMessageConverters(List<HttpMessageConverter<?>> converters) {
+           converters.add(new MappingJackson2HttpMessageConverter());
+       }
+   }
+   ~~~
+
+
+
+#### Post
+
+~~~java
+    @PostMapping
+    @ResponseBody
+    public User add(@RequestBody User user) { // request body의 data 받음
+        return user;
+    }
+~~~
+
+
+
+#### @ResponseBody 지워버리기
+
+~~~java
+@org.springframework.web.bind.annotation.RestController
+~~~
+
+Contoller 대신 RestController 사용
+
