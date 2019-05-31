@@ -9,11 +9,34 @@ import org.springframework.web.servlet.ModelAndView;
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 import java.io.*;
 
 @Controller
+@SessionAttributes("user")
 @RequestMapping("/user")
 public class UserController {
+    @GetMapping
+    public User get() {
+        User user = User.builder().id(1).name("s attr").password("asas").build();
+        return user;
+    }
+
+    @GetMapping("/session")
+    public String session(HttpSession session) {
+        User user = User.builder().id(10).name("session").password("111").build();
+        session.setAttribute("user", user);
+        return "redirect:/user/getSession";
+    }
+
+    @GetMapping("/getSession")
+    public ModelAndView getSession(HttpSession session) {
+        User user = (User) session.getAttribute("user");
+        ModelAndView modelAndView = new ModelAndView("user");
+        modelAndView.addObject("user", user);
+        return modelAndView;
+    }
+
     @RequestMapping("/get")
     public ModelAndView get(@RequestParam("id") Integer id, @RequestParam("name") String name, HttpServletResponse response) {
         User user = User.builder().id(id).name(name).password("1234").build();
