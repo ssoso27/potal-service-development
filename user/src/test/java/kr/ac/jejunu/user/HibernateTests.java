@@ -62,14 +62,21 @@ public class HibernateTests {
     @Test
     public void saveUser() {
         Session session = sessionFactory.openSession();
-        User user = User.builder().name("abcd").password("111").build();
-        session.save(user); // 쿼리 생성
+        session.getTransaction().begin(); // transaction 시작 (트랜잭션 지원하는 버전 DB 사용해야함!)
+        try {
+            User user = User.builder().name("abcd").password("111").build();
+            session.save(user); // 쿼리 생성
 
-        User saveUser = session.get(User.class, user.getId()); // 쿼리 안생성. 캐시 씀.
-        assertThat(saveUser.getName(), is(user.getName()));
-        assertThat(saveUser.getPassword(), is(user.getPassword()));
+            User saveUser = session.get(User.class, user.getId()); // 쿼리 안생성. 캐시 씀.
+            assertThat(saveUser.getName(), is(user.getName()));
+            assertThat(saveUser.getPassword(), is(user.getPassword()));
 
-        session.close();
+            session.getTransaction().commit(); // 트랜잭션 커밋
+        } catch (HibernateException e) {
+            session.getTransaction().rollback(); // 트랜잭션 롤백
+        } finally {
+            session.close();
+        }
     }
 
     public static void destory() {
