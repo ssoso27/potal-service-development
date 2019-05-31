@@ -2206,3 +2206,564 @@ public class RestController {
 
 Contoller 대신 RestController 사용
 
+
+
+---
+
+## [12] 19.05.30
+
+### Spring Boot 란?
+
+Spring의 모든 라이브러리를 다 갖고 있음.
+
+Spring Boot 의 기본 WAS인 Tomcat을 가지고 진행을 할 것.
+
+MSA를 추구함.
+
+
+
+### ORM
+
+Object-Relational Mapping
+
+#### 배경
+
+RDBMS 쓰다가, 객체지향이 나옴 -> 근데 둘이 잘 안맞음. (ex: 상속 등)
+
+RDBMS에 객체지향을 어떻게 매핑시킬까? -> ORM 탄생!
+
+SQL 영역과 java object 영역을 구분해보자
+
+
+
+#### MyBatis
+
+![mybatis ì ëí ì´ë¯¸ì§ ê²ìê²°ê³¼](https://tkstoneblog.files.wordpress.com/2018/11/sqlmap-xml.png?w=1100)
+
+대박 심플함.
+
+xml에 native query와 parameter, result를 설정 
+
+모놀리틱하고 큰 서비스에서 주로 씀. 
+
+- 특징
+  - 다이나믹 쿼리 가능
+  - 쿼리 튜닝 가능
+  - object에 직접 매핑 안됨
+  - 나온 result를 내가 object에 매핑해줌
+  - 캐시를 해줌 (근데 유저가 일일이 설정해줘야함)
+
+
+
+#### Hibernate
+
+진정한 ORM을 구현하게 됨
+
+ - object와 data를 1:1 매핑 잘 됨
+ - Table의 칼럼과 object를 일일이 매핑해줌 
+ - n:m 관계 등 매핑 가능
+ - 캐시를 해줌
+
+그래서 얘가 Mybatis 보다 성능이 좋다는건 알겠는데 ... 클러스터링을 한다는거야 캐시를 한다는거야;
+
+
+
+##### (참고) 클러스터링
+
+![web db í´ë¬ì¤í°ì ëí ì´ë¯¸ì§ ê²ìê²°ê³¼](https://bobcares.com/wp-content/uploads/percona-xtradb-cluster-high-availability.jpg)
+
+하나의 app이 하나의 db를 참조하는 것이 아니라,
+
+여러개의 app이 여러개의 db를 참조함
+
+--> db1에 변화가 있을때 모두 그걸 변경해야하고, rollback 등도 그래야함 
+
+그렇게 좀 동기화시켜주는? 그런 작업을 클러스터링이라고 함
+
+
+
+클러스터링을 위해서는, DB가 캐시를 쓰면 안됨. -> DB IO가 너무 많아져서 성능 하락!
+
+
+
+#### JPA
+
+진정한 ORM?
+
+퍼시스턴스 단의 구현은 이걸 활용해서 하래 'ㅁ')/
+
+짱편하대 'ㅁ')/
+
+
+
+### 실습해보기!
+
+#### 1. 프로젝트 생성
+
+Spring Initializer 를 통해서 쉽게 boot 생성
+
+
+
+![1559288690289](C:\Users\sohi8\AppData\Roaming\Typora\typora-user-images\1559288690289.png)
+
+
+
+![1559288867714](C:\Users\sohi8\AppData\Roaming\Typora\typora-user-images\1559288867714.png)
+
+쓸 라이브러리를 설정
+
+- Core
+
+  - DevTools 
+
+    서버 실행된 상태에서 자기가 컴파일만 시키면 알아서 적용됨
+
+  - Lombok
+
+  - 세션 쿠키는 뭐 쓸거면 쓰던가...
+
+- Web
+
+  - Web
+  - Rest Repositories
+    - ORM에 맞게 쿼리 날려주면 알아서 rest api까지 만들어줌???
+    - 쓸거면 쓰셈
+
+- Template 엔진 
+
+  - Thymeleaf (거의 필수)
+
+- Security : 로그인 같은거 할거면 쓰셈
+
+- SQL
+
+  - JPA
+  - MySQL
+
+![1559288950343](C:\Users\sohi8\AppData\Roaming\Typora\typora-user-images\1559288950343.png)
+
+Lombok 쓰기 위해서 어노테이션 설정
+
+
+
+##### build.gradle 살펴보기
+
+- spring-boot-starter : 스프링 부트에 필요한 라이브러리들을 가지고 있음 (편리ㅠ)
+
+  - 단점 : 얘네가 알아서 가져와줬는데, 내가 쓰던거랑 안 맞을 수가 있음. (ex: 레거시 플젝) 
+
+    
+
+#### 2. Hibernate Test 해보기
+
+Hibernate 로 Test만 함 해보자
+
+##### 1) 프로젝트 구조 설정
+
+![1559289179571](C:\Users\sohi8\AppData\Roaming\Typora\typora-user-images\1559289179571.png)
+
+##### 2) Java 9 이상인 경우
+
+hibernate 를 쓸때 필요한 jaxb 라는 애를 추가해줘야함. (Java 8 까지는 갖고 있는데, 9 부터는 빼버렸대)
+
+
+
+##### 3) Test 코드 작성 - 설정
+
+[HibernateTests.java]
+
+~~~java
+package kr.ac.jejunu.user;
+
+import kr.ac.jejunu.user.model.User;
+import org.hibernate.HibernateException;
+import org.hibernate.Session;
+import org.hibernate.SessionFactory;
+import org.hibernate.boot.registry.StandardServiceRegistry;
+import org.hibernate.boot.registry.StandardServiceRegistryBuilder;
+import org.hibernate.cfg.Configuration;
+import org.junit.BeforeClass;
+import org.junit.Test;
+
+import static org.hamcrest.Matchers.is;
+import static org.junit.Assert.assertThat;
+
+public class HibernateTests {
+    // 세션 단위는 하나의 커넥션...이라고 일단 봐두지만, 동일하진 않다.
+    // 세션 팩토리 : 커넥션 관리해주는 애.
+    static SessionFactory sessionFactory;
+
+    @BeforeClass
+    public static void setup() {
+        // 세션팩토리 가져오기!
+        /// 1. configuration 을 통해서 가져올거니까 config 만듬
+        /// 2. registry 등록
+        /// 3. config에서 registry를 통해 가져옴
+
+        Configuration configuration = new Configuration()
+                .configure("jejunu.cfg.xml")
+                .addResource("User.hbm.xml");
+
+        // 서비스를 활용할 떄 어떻게 할 것인가? 를 등록하는 역할
+        final StandardServiceRegistry registry =
+                new StandardServiceRegistryBuilder()
+                    .applySettings(configuration.getProperties()) // 아까 만든 config 가져와서 등록
+                    .build();
+
+        try {
+            sessionFactory = configuration.buildSessionFactory(registry);
+        } catch (HibernateException e) {
+            StandardServiceRegistryBuilder.destroy(registry);
+        }
+    }
+
+    public static void destory() {
+        sessionFactory.close();
+    }
+}
+
+~~~
+
+
+
+Session : 하나의 connect scope
+
+Session Factory : connection pool 같은, connection 관리해주는 애 
+
+
+
+[jejunu.cfg.xml]
+
+
+
+커넥션을 위한 config
+
+dialect : 너 어떤 솔루션 쓸거야? (=어떤 쿼리로 만들거야? ex: MySQL)
+
+[User.hbm.xml]
+
+
+
+hibernate mapping.
+
+Object - Table/Field 매핑
+
+
+
+##### 4) Test
+
+[HibernateTests.java]
+
+~~~java
+
+...
+    @Test
+    public void getUser() {
+        // DB의 유저를 가져오는 로직
+
+        // 1. 세션 얻어오기
+        Session session = sessionFactory.openSession();
+        // 2. 오브젝트 얻어오기 (query 생성)
+        User user = session.get(User.class, 1);
+
+        assertThat(user.getName(), is("양소희"));
+        assertThat(user.getPassword(), is("pass12"));
+
+        session.close();
+    }
+
+    @Test
+    public void saveUser() {
+        Session session = sessionFactory.openSession();
+        User user = User.builder().name("abcd").password("111").build();
+        session.save(user); // 쿼리 생성
+
+        User saveUser = session.get(User.class, user.getId()); // 쿼리 안생성. 캐시 씀.
+        assertThat(saveUser.getName(), is(user.getName()));
+        assertThat(saveUser.getPassword(), is(user.getPassword()));
+
+        session.close();
+    }
+...
+~~~
+
+ㄴ 세션 단위 캐시
+
+
+
+###### (참고) 캐시
+
+- 세션 단위 캐시
+  - 하나의 세션 단위에서 똑같은 쿼리가 호출 된다면, 쿼리를 굳이 만들지 않고 캐시를 가져옴
+
+- 세컨드 레벨 캐시
+
+   - 세션 팩토리 레이어에서 캐시가 알아서 동작?
+
+  - 분산 환경에 대한 캐시? 
+  - Redis를 통해서 함?
+
+##### 5) 1:n 관계
+
+[User.java]
+
+~~~java
+@Data
+@Builder
+public class User {
+    private Integer id;
+    private String name;
+    private String password;
+    private List<Comment> comments; // 1:n 관계
+}
+~~~
+
+[Comment.java]
+
+~~~java
+@Data
+@Builder
+public class Comment {
+    private Integer id;
+    // user가 toString 당하면 Comment로 들어옴. 그럼 또 user로 들어감... -> overflow 발생!!
+    /// ==> @Data 대신 @Getter @Setter 써줘야한다.
+    private User user; 
+    private String content;
+}
+~~~
+
+
+
+[HibernateTests.java]
+
+~~~java
+...
+Configuration configuration = new Configuration()
+    .configure("jejunu.cfg.xml")
+    .addResource("User.hbm.xml")
+    .addResource("Comment.hbm.xml"); // 추가 
+...
+~~~
+
+
+
+##### 5) JPA로 변경
+
+[User.java]
+
+~~~java
+package kr.ac.jejunu.user.model;
+
+import lombok.*;
+
+import javax.persistence.*;
+import java.util.List;
+
+@Getter
+@Setter
+@Builder
+@NoArgsConstructor
+@AllArgsConstructor
+@Entity(name = "userinfo") // Table명이랑  Object명 다르니까 적어줌
+public class User {
+    @Id
+    @GeneratedValue
+    private Integer id;
+    private String name;
+    private String password;
+
+    @OneToMany
+    @JoinColumn(name = "userinfo_id")
+    private List<Comment> comments;
+}
+
+~~~
+
+[Comment.java]
+
+~~~java
+package kr.ac.jejunu.user.model;
+
+import lombok.Builder;
+import lombok.Getter;
+import lombok.Setter;
+
+import javax.persistence.*;
+
+@Getter
+@Setter
+@Builder
+@Entity
+public class Comment {
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Integer id;
+
+    @ManyToOne // n:1 관계 표시
+    @JoinColumn(name = "userinfo_id") // 뭘로 쪼인할건지 알려줘야함
+    private User user;
+
+    private String content;
+}
+
+~~~
+
+[HibernateTests.java]
+
+~~~java
+...
+    Configuration configuration = new Configuration()
+    .configure("jejunu.cfg.xml")
+    .addAnnotatedClass(User.class)
+    .addAnnotatedClass(Comment.class);
+...
+~~~
+
+
+
+##### 6) 트랜잭션
+
+[HibernateTests.java]
+
+~~~java
+    @Test
+    public void saveUser() {
+        Session session = sessionFactory.openSession();
+        session.getTransaction().begin(); // transaction 시작 (트랜잭션 지원하는 버전 DB 사용해야함!)
+        try {
+            User user = User.builder().name("abcd").password("111").build();
+            session.save(user); // 쿼리 생성
+
+            User saveUser = session.get(User.class, user.getId()); // 쿼리 안생성. 캐시 씀.
+            assertThat(saveUser.getName(), is(user.getName()));
+            assertThat(saveUser.getPassword(), is(user.getPassword()));
+            
+            session.getTransaction().commit(); // 트랜잭션 커밋
+        } catch (HibernateException e) {
+            session.getTransaction().rollback(); // 트랜잭션 롤백
+        } finally {
+            session.close();
+        }
+    }
+~~~
+
+
+
+#### 3. JPA로 해보기
+
+##### 1) Controller
+
+[UserController.java]
+
+~~~java
+@RestController
+@RequestMapping("/user")
+@RequiredArgsConstructor
+public class UserController {
+
+    private final UserRepository userRepository;
+
+    @GetMapping
+    public List<User> list() {
+		return userRepository.findAll();
+    }
+}
+
+~~~
+
+##### 2) Repository
+
+[UserRepository.java]
+
+~~~java
+@Repository
+public interface UserRepository extends JpaRepository<User, Integer> {
+
+}
+~~~
+
+##### 3) DB 정의
+
+[main/resources/application.yml]
+
+~~~yml
+spring:
+  datasource:
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    username: jeju
+    url: jdbc:mysql://localhost/jeju
+    password: jejupw
+~~~
+
+
+
+##### 4) User 모델 변경
+
+[User.java]
+
+~~~java
+public class User {
+    ...
+    // @JsonIgnore // Json 생성을 안함.
+    @JsonIgnoreProperties(value={"user"}) // json 생성은 할건데, 이 오브젝트 하위의 depth를 중지시킬거야.
+    private List<Comment> comments;
+}
+~~~
+
+
+
+###### (참고) Spring JPA
+
+interface 기반으로, method 명만 가지고 쿼리를 만들 수 있음.
+
+
+
+##### 5) lazy 로딩 ★
+
+[UserController.java]
+
+~~~java
+...
+@GetMapping("/list")
+public List<User> list() {
+    List<User> all = userRepository.findAll();
+    all.forEach(user -> {
+        // lazy 로딩
+        /// 쿼리가 필요한 그 순간에 로딩함
+        /// 여기서 또 comment 가져오는 쿼리 만듬.
+        user.getComments().size();
+    });
+    return all;
+}
+...
+~~~
+
+user.getComments() 때 쿼리 돌리느라 그만큼 쿼리가 더 만들어짐;; (Hibernate의 문제점)
+
+​	-> 성능 이슈가 발생
+
+###### ★ Hibernate 잘못 쓰는 경우
+
+- 리스트를 페이징 없이 가져오는 경우!
+  - 쿼리가 미쳐 날뛸 수 있음 ^^;
+- 1:n 관계에서, List로 표현하지 말기. (대신 n:1에서 표현하기)
+  - ex) User에서 가져오지 말고, Comment에서 가져와라. 
+- 내가 몇 번의 쿼리를 시행하겠구나. 하는 걸 잘 설계하라.
+
+##### 6) 쿼리 작성해보기
+
+[UserRepository.java]
+
+~~~java
+@Repository
+public interface UserRepository extends JpaRepository<User, Integer> {
+    public List<User> findAllByName(String name);
+
+    // HQL 쿼리
+    // Object 기반 쿼리. 테이블 기반이 아님!
+    @Query("select distinct u from Comment c join c.user u " +
+                "where c.content like concat(:content, '%')")
+    List<User> findAllByContent(@Param("content") String content);
+}
+~~~
+
